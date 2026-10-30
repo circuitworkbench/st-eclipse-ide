@@ -40,12 +40,11 @@ You can install the CircuitWorkbench Structured Text toolchain into an existing 
 3. Click the **Add...** button in the upper-right corner.
 4. Enter the repository details:
    - **Name:** `CircuitWorkbench ST Update Site`
-   - **Location:** `https://updates.circuitworkbench.com/st-eclipse-ide/releases/` *(or specify a local archive if using an offline zip)*
+   - **Location:** `https://raw.githubusercontent.com/circuitworkbench/st-eclipse-ide/main/repository` *(or specify a local archive if using an offline zip)*
 5. Click **Add**.
 6. Select the **CircuitWorkbench Structured Text Feature** checkbox:
-   - `CircuitWorkbench ST Language & Editor`
-   - `CircuitWorkbench Virtual Simulation Engine`
-   - `CircuitWorkbench PLC Force Dashboard & Debugger`
+   - `Structured Text IDE (Core Edition)`
+   - `Structured Text IDE (Pro Edition)`
 7. Click **Next**, review the installation details, accept the license terms, and click **Finish**.
 8. Restart Eclipse when prompted.
 
