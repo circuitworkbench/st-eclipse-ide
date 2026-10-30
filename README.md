@@ -1,6 +1,5 @@
 # CircuitWorkbench IEC 61131-3 Structured Text IDE for Eclipse (`st-eclipse-ide`)
 
-[![License: BSL 1.1](https://img.shields.io/badge/License-BSL_1.1-blue.svg)](LICENSE.md)
 [![Eclipse Version](https://img.shields.io/badge/Eclipse-2024--03%2B-orange.svg)](https://www.eclipse.org/)
 [![Java Compatibility](https://img.shields.io/badge/Java-17%20%7C%2021-brightgreen.svg)](https://adoptium.net/)
 
@@ -23,9 +22,9 @@ Built specifically for protection engineers, utility automation specialists, and
 ## System Requirements
 
 - **Java Runtime Environment:** OpenJDK or Oracle JDK 17 or 21+.
-- **Eclipse IDE Base:** Eclipse IDE 2024-03 (4.31) or newer.
+- **Eclipse IDE Base (for IDE extension):** Eclipse IDE 2024-03 (4.31) or newer.
   - *Recommended packages:* Eclipse IDE for Java Developers, Eclipse Modeling Tools, or Eclipse Classic.
-- **Operating Systems:** Windows 10/11 (x64), Linux (x86_64 / AArch64), or macOS (Apple Silicon / Intel).
+- **Operating Systems:** Windows 10/11 (x64), Linux (x86_64), or macOS (x86_64 / Apple Silicon via Rosetta or native JVM).
 
 ---
 
@@ -76,31 +75,102 @@ The interactive **PLC Force Dashboard** enables engineers to monitor live simula
 
 ## Automated CLI & CI/CD Test Runner
 
-For headless builds and CI/CD pipelines, execute tests using the standalone native runner without launching the Eclipse GUI:
+For headless verification suites and automated CI/CD pipelines, execute tests using the standalone native runner without launching the Eclipse GUI.
 
-### Windows Command Prompt / PowerShell
+### Downloading the CLI Executable Packages
+
+Standalone pre-built packages for Windows, Linux, and macOS are published under GitHub Releases:  
+🔗 **[CircuitWorkbench ST CLI v1.0.0 Release](https://github.com/circuitworkbench/st-eclipse-ide/releases/tag/cli-v1.0.0)**
+
+Download the archive matching your target operating system:
+
+| Platform | Architecture | Release Package Archive | Executable Binary |
+| :--- | :--- | :--- | :--- |
+| **Windows** | x86_64 | `com.circuitworkbench.st.cli.product-win32.win32.x86_64.zip` | `st-test-runnerc.exe` |
+| **Linux** | x86_64 | `com.circuitworkbench.st.cli.product-linux.gtk.x86_64.tar.gz` | `st-test-runnerc` |
+| **macOS** | x86_64 | `com.circuitworkbench.st.cli.product-macosx.cocoa.x86_64.tar.gz` | `st-test-runnerc` |
+
+> **Note for Windows:** The archive provides both `st-test-runner.exe` (GUI subsystem) and `st-test-runnerc.exe` (Console subsystem). Always execute **`st-test-runnerc.exe`** in Command Prompt, PowerShell, or CI scripts to synchronously capture terminal output, test progress logs, and process exit codes.
+
+---
+
+### Installation & Quick Start
+
+#### Windows (Command Prompt / PowerShell)
+
+1. Download and extract `com.circuitworkbench.st.cli.product-win32.win32.x86_64.zip`.
+2. Open Command Prompt or PowerShell and navigate to the extracted directory.
+3. Run the test runner:
 
 ```cmd
-:: Using an environment variable for the license key
+:: Set license key via environment variable (recommended for CI/CD)
 set CIRCUITWORKBENCH_LICENSE_KEY=YOUR_LICENSE_KEY_HERE
 st-test-runnerc.exe --source-dir .\substation-logic --report-dir .\build\test-results
 
-:: Passing parameters directly
+:: Or pass parameters directly via CLI arguments
 st-test-runnerc.exe ^
   --source-dir .\substation-logic ^
   --report-dir .\build\test-results ^
   --max-cycles 5000 ^
   --cycle-delta 20 ^
   --license-key YOUR_LICENSE_KEY_HERE
+```
+
+#### Linux & macOS (Bash / Terminal)
+
+1. Download and extract the archive:
+   ```bash
+   # Linux
+   tar -xzf com.circuitworkbench.st.cli.product-linux.gtk.x86_64.tar.gz
+   
+   # macOS
+   tar -xzf com.circuitworkbench.st.cli.product-macosx.cocoa.x86_64.tar.gz
+   ```
+2. Navigate to the extracted directory and ensure execution permissions are granted:
+   ```bash
+   chmod +x st-test-runnerc
+   ```
+3. Run the test runner:
+   ```bash
+   # Set license key via environment variable
+   export CIRCUITWORKBENCH_LICENSE_KEY="YOUR_LICENSE_KEY_HERE"
+   ./st-test-runnerc --source-dir ./substation-logic --report-dir ./build/test-results
+
+   # Or pass parameters directly via CLI arguments
+   ./st-test-runnerc \
+     --source-dir ./substation-logic \
+     --report-dir ./build/test-results \
+     --max-cycles 5000 \
+     --cycle-delta 20 \
+     --license-key "YOUR_LICENSE_KEY_HERE"
+   ```
 
 ---
 
-## Licensing & StructuredText Pro
+### Command-Line Arguments
 
-StructuredText Pro feature is released under the **Business Source License 1.1 (BSL 1.1)**. 
+| Argument | Description | Default |
+| :--- | :--- | :--- |
+| `--source-dir <path>` | Directory path containing `.st` source and automated test suite files | `.` |
+| `--report-dir <path>` | Destination folder where the JUnit XML report (`TEST-plc-results.xml`) is written | `./build/test-results` |
+| `--max-cycles <int>` | Maximum scan cycles per test before terminating | `100` |
+| `--cycle-delta <ms>` | Simulated scan cycle interval in milliseconds (advances runtime timers like `TON`) | `50` |
+| `--license-key <key>` | Pro license key (can also be supplied via `CIRCUITWORKBENCH_LICENSE_KEY`) | None |
 
-- **Evaluation & Non-Production:** Free of charge for personal educational study, evaluation, local unit testing, and open non-commercial experiments.
-- **Production & Commercial Pipelines:** Commercial engineering work, industrial control verification, transpiler outputs used in production, and CI/CD runner pipelines require an active **CircuitWorkbench Pro** subscription.
+### Exit Codes & CI Integration
+
+* **`0`**: All discovered test POUs passed successfully.
+* **`1`**: Test assertion failure, syntax/linking validation error, invalid argument, or missing Pro license entitlement.
+* **Test Reports**: Automatically writes standard JUnit XML results to `<report-dir>/TEST-plc-results.xml` for native ingestion into GitHub Actions test reporters, GitLab CI reports, or Jenkins.
+
+---
+
+## Licensing & Editions
+
+CircuitWorkbench Structured Text is distributed under proprietary binary licensing across two editions:
+
+- **Core Edition (Freeware):** Free of charge for development, syntax validation, AST analysis, and local non-simulation editing.
+- **Pro Edition (Commercial Subscription):** Commercial engineering work, industrial control verification, virtual PLC cycle simulation, interactive Force Dashboard overrides, transpiler outputs, and headless CI/CD runner pipelines require an active **CircuitWorkbench Pro** subscription.
 
 ### How to Obtain a Pro License Key
 
@@ -118,18 +188,22 @@ Choose one of three activation methods:
 - Navigate to **StructuredText** $\rightarrow$ **Licensing**.
 - Paste your license key into the **License Key** field and click **Activate/Refresh**.
 - The IDE will contact the activation service and cache an offline entitlement token valid for 3 days between connectivity syncs.
-- Click **Apply and Close**
+- Click **Apply and Close**.
 
 #### 2. Via Environment Variable (Ideal for Docker & CI/CD Runners)
 Set the environment variable prior to starting Eclipse or running the headless CLI:
 ```bash
-export CIRCUITWORKBENCH_LICENSE_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+export CIRCUITWORKBENCH_LICENSE_KEY="YOUR_LICENSE_KEY_HERE"
 ```
 
-#### 3. Via Eclipse / Java VM Arguments
-Add the flag to your `eclipse.ini` file or pass it to the command-line JVM launch:
+#### 3. Via Command-Line Argument / JVM System Properties
+Pass the license key directly to the CLI test launcher:
+```bash
+./st-test-runnerc --license-key "YOUR_LICENSE_KEY_HERE"
+```
+Or append it to your `eclipse.ini` / Java VM launch flags:
 ```text
--Dcircuitworkbench.license.key=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+-Dcircuitworkbench.license.key=YOUR_LICENSE_KEY_HERE
 ```
 
 ---
@@ -143,4 +217,4 @@ Add the flag to your `eclipse.ini` file or pass it to the command-line JVM launc
 
 ## License
 
-This software is distributed under the terms of the **Business Source License 1.1**. See [LICENSE.md](LICENSE.md) for full terms and conditions.
+This software is distributed under the terms of the **CircuitWorkbench End User License Agreement**. See `about.html` in each feature distribution for edition-specific terms and conditions.
