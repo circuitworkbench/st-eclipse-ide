@@ -76,29 +76,28 @@ The interactive **PLC Force Dashboard** enables engineers to monitor live simula
 
 ## Automated CLI & CI/CD Test Runner
 
-For headless builds and CI/CD pipelines, execute tests using the portable runner without launching the Eclipse GUI:
+For headless builds and CI/CD pipelines, execute tests using the standalone native runner without launching the Eclipse GUI:
 
-```bash
-# Run automated verification suite with environment license key
-export CIRCUITWORKBENCH_LICENSE_KEY="your-license-key-here"
-cwb-st test --project ./substation-logic --suite ats_verification.st
-```
+### Windows Command Prompt / PowerShell
 
-Alternatively, pass parameters directly on the command line:
+```cmd
+:: Using an environment variable for the license key
+set CIRCUITWORKBENCH_LICENSE_KEY=YOUR_LICENSE_KEY_HERE
+st-test-runnerc.exe --source-dir .\substation-logic --report-dir .\build\test-results
 
-```bash
-java -jar com.circuitworkbench.st.cli.jar \
-  --project /path/to/project \
-  --license-key 80e15db5-c796-436b-850c-8f9c98a48abe \
-  --cycles 5000 \
-  --report junit-results.xml
-```
+:: Passing parameters directly
+st-test-runnerc.exe ^
+  --source-dir .\substation-logic ^
+  --report-dir .\build\test-results ^
+  --max-cycles 5000 ^
+  --cycle-delta 20 ^
+  --license-key YOUR_LICENSE_KEY_HERE
 
 ---
 
-## Licensing & CircuitWorkbench Pro
+## Licensing & StructuredText Pro
 
-`st-eclipse-ide` is released under the **Business Source License 1.1 (BSL 1.1)**. 
+StructuredText Pro feature is released under the **Business Source License 1.1 (BSL 1.1)**. 
 
 - **Evaluation & Non-Production:** Free of charge for personal educational study, evaluation, local unit testing, and open non-commercial experiments.
 - **Production & Commercial Pipelines:** Commercial engineering work, industrial control verification, transpiler outputs used in production, and CI/CD runner pipelines require an active **CircuitWorkbench Pro** subscription.
@@ -106,7 +105,7 @@ java -jar com.circuitworkbench.st.cli.jar \
 ### How to Obtain a Pro License Key
 
 1. **Purchase a Subscription:**
-   Visit the [CircuitWorkbench Lemon Squeezy Storefront](https://circuitworkbench.lemonsqueezy.com/buy/1447941) to purchase a license.
+   Visit the [CircuitWorkbench Lemon Squeezy Storefront](https://circuitworkbench.lemonsqueezy.com/checkout/buy/a01cb0a1-e3bf-453c-843c-ccd63e819069) to purchase a license.
 2. **Retrieve Your Key:**
    Upon checkout completion, your order confirmation email will contain your unique UUID license key (formatted as `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`).
 
@@ -116,9 +115,10 @@ Choose one of three activation methods:
 
 #### 1. Inside the Eclipse IDE (Graphical)
 - Open **Window** $\rightarrow$ **Preferences** (or **Eclipse** $\rightarrow$ **Settings...** on macOS).
-- Navigate to **CircuitWorkbench** $\rightarrow$ **Licensing**.
-- Paste your license key into the **License Key** field and click **Apply and Close**.
+- Navigate to **StructuredText** $\rightarrow$ **Licensing**.
+- Paste your license key into the **License Key** field and click **Activate/Refresh**.
 - The IDE will contact the activation service and cache an offline entitlement token valid for 3 days between connectivity syncs.
+- Click **Apply and Close**
 
 #### 2. Via Environment Variable (Ideal for Docker & CI/CD Runners)
 Set the environment variable prior to starting Eclipse or running the headless CLI:
