@@ -38,14 +38,18 @@ You can install the CircuitWorkbench Structured Text toolchain into an existing 
 2. In the top menu, go to **Help** $\rightarrow$ **Install New Software...**
 3. Click the **Add...** button in the upper-right corner.
 4. Enter the repository details:
-   - **Name:** `CircuitWorkbench ST Update Site`
+   - **Name:** `StructuredText Update Site`
    - **Location:** `https://raw.githubusercontent.com/circuitworkbench/st-eclipse-ide/main/repository` *(or specify a local archive if using an offline zip)*
 5. Click **Add**.
 6. Select the **CircuitWorkbench Structured Text Feature** checkbox:
-   - `Structured Text IDE (Core Edition)`
-   - `Structured Text IDE (Pro Edition)`
+   - `CircuitWorkbench Dependencies(Offline Runtime)`
+   - `CircuitWorkbench Structured Text IDE (Core EPL-2.0)`
+   - `CircuitWorkbench Structured Text Pro Tools (Commercial)`
 7. Click **Next**, review the installation details, accept the license terms, and click **Finish**.
 8. Restart Eclipse when prompted.
+
+<img width="1082" height="795" alt="install-walkthrough" src="https://github.com/user-attachments/assets/3404960e-c9c4-44c4-99c1-e6e33a71f4fb" />
+
 
 ### Method 2: Verifying the Installation
 
@@ -218,3 +222,6 @@ Or append it to your `eclipse.ini` / Java VM launch flags:
 ## License
 
 This software is distributed under the terms of the **CircuitWorkbench End User License Agreement**. See `about.html` in each feature distribution for edition-specific terms and conditions.
+
+<img width="1138" height="807" alt="new-project-walkthrough" src="https://github.com/user-attachments/assets/446fcde6-eb7a-460c-aad7-89ab48974c86" />
+
